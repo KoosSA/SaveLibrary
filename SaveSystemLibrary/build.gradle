@@ -1,0 +1,28 @@
+plugins {
+	id 'java'
+	id 'java-library'
+}
+
+sourceCompatibility = '1.8'
+
+project.ext {
+	gson = "2.8.6"
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation group: 'com.google.code.gson', name: 'gson', version: "${gson}"
+}
+
+sourceSets {
+	src {
+	 	main {
+	    	java {
+	      
+	    	}
+	  	}
+	 }
+}
