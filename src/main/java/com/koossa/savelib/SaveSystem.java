@@ -40,7 +40,7 @@ public class SaveSystem {
 			return false;
 		}
 		writeStr = gson.toJson(obj);
-		writeFile = new File(sub, name + ".json");
+		writeFile = new File(sub, name);
 		if (writeStr.length() > 0) {
 			try {
 				FileWriter writer = new FileWriter(writeFile);
@@ -48,7 +48,7 @@ public class SaveSystem {
 				writer.close();
 				return true;
 			} catch (IOException e) {
-				System.err.println("Failed to save file: " + obj.getClass().getSimpleName() + ".json");
+				System.err.println("Failed to save file: " + name);
 				e.printStackTrace();
 				return false;
 			}
@@ -67,13 +67,13 @@ public class SaveSystem {
 			sub.mkdirs();
 		}
 		try {
-			readFile = new File(sub, name + ".json");
+			readFile = new File(sub, name);
 			JsonReader reader = new JsonReader(new FileReader(readFile));
 			Object o = gson.fromJson(reader, clazz);
 			reader.close();
 			return clazz.cast(o);
 		} catch (IOException e) {
-			System.err.println("Failed to load file: " + name + ".json. Creating default implementation.");
+			System.err.println("Failed to load file: " + name + " Creating default implementation.");
 			try {
 				T o = clazz.cast(clazz.getConstructors()[0].newInstance());
 				if (o instanceof ISavable) {
@@ -83,7 +83,7 @@ public class SaveSystem {
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException | SecurityException e1) {
 				e1.printStackTrace();
-				System.err.println("Failed to load file: " + clazz.getSimpleName() + ".json");
+				System.err.println("Failed to load file: " + name);
 			}
 		}
 		return null;
