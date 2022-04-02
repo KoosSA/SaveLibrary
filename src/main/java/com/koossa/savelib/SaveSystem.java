@@ -77,7 +77,7 @@ public class SaveSystem {
 			try {
 				T o = clazz.cast(clazz.getConstructors()[0].newInstance());
 				if (o instanceof ISavable) {
-					((ISavable) o).save();
+					((ISavable) o).save(isGameData, name, subfolder);
 				}
 				return o;
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
