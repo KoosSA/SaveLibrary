@@ -9,6 +9,11 @@ import java.lang.reflect.InvocationTargetException;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
+/**
+ * Used to interface with the Save System. Handles saving and loading objects from storage.
+ * @author KoosSA
+ *
+ */
 public class SaveSystem {
 
 	private static Gson gson;
@@ -17,6 +22,11 @@ public class SaveSystem {
 	private static String writeStr;
 	private static File readFile, writeFile;
 
+	/**
+	 * Initializes the save system. Should be called only once before the library is used usually on program startup.
+	 * @param saveFolder The main folder to which data is saved. 
+	 * @param dataFolder The main folder to which internal data is saved.
+	 */
 	public static void init(File saveFolder, File dataFolder) {
 		gson = new Gson();
 		SaveSystem.saveFolder = saveFolder;
@@ -29,6 +39,14 @@ public class SaveSystem {
 		}
 	}
 
+	/**
+	 * Saves an object to storage.
+	 * @param obj The object to be saved
+	 * @param isGameData Is the data saved part of the internal data or not? Best to leave false at the moment.
+	 * @param subfolder Sub folder to which to save data
+	 * @param name of the saved file
+	 * @return true / false depending on if the data was saved or not
+	 */
 	public static boolean save(Object obj, boolean isGameData, String subfolder, String name) {
 		File folder = isGameData ? dataFolder : saveFolder;
 		File sub = new File(folder, subfolder);
@@ -56,6 +74,15 @@ public class SaveSystem {
 		return false;
 	}
 
+	/**
+	 * Loads a saved file to an object. If no saved file i found, a new object with default implementation will be returned.
+	 * @param <T> The type of object to return.
+	 * @param clazz Class of the object to be loaded. Ideally a class implementing {@link ISavable} interface
+	 * @param isGameData Is the data saved part of the internal data or not? Best to leave false at the moment.
+	 * @param subfolder Sub folder to which to save data
+	 * @param name of the saved file
+	 * @return the loaded object or null
+	 */
 	public static <T> T load(Class<T> clazz, boolean isGameData, String subfolder, String name) {
 		if (gson == null) {
 			System.err.println("Please Initialise SaveSystem, aborting file loading.");
