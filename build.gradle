@@ -9,7 +9,7 @@ group 'github.koossa'
 version mavenPubVersion
 
 project.ext {
-	gson = "2.8.6"
+	gson = "2.11.0"
 }
 
 repositories {

@@ -115,5 +115,74 @@ public class SaveSystem {
 		}
 		return null;
 	}
+	
+	/**
+	 * Saves the object into the specified folder with the specified name.
+	 * @param folder folder to save the file to
+	 * @param name the name of the saved file
+	 */
+	public static boolean saveTo(Object obj, File folderToSaveTo, String name) {
+		if (!folderToSaveTo.exists()) {
+			folderToSaveTo.mkdirs();
+		}
+		if (gson == null) {
+			System.err.println("Please Initialise SaveSystem, aborting saving file.");
+			return false;
+		}
+		writeStr = gson.toJson(obj);
+		writeFile = new File(folderToSaveTo, name);
+		if (writeStr.length() > 0) {
+			try {
+				FileWriter writer = new FileWriter(writeFile);
+				writer.write(writeStr);
+				writer.close();
+				return true;
+			} catch (IOException e) {
+				System.err.println("Failed to save file: " + name);
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Loads the data to a object of given class. If no saved data is found in the specified location, a new implementation of the class is created.
+	 * @param <T> The type of object to return
+	 * @param clazz The class the data belongs to
+	 * @param folder the folder where the saved data can be found
+	 * @param name the name of the saved data file
+	 * @return the loaded object or null
+	 */
+	public static <T> T loadFrom(Class<T> clazz, File folderToLoadFrom, String name) {
+		if (gson == null) {
+			System.err.println("Please Initialise SaveSystem, aborting file loading.");
+			return null;
+		}
+		if (!folderToLoadFrom.exists()) {
+			folderToLoadFrom.mkdirs();
+		}
+		try {
+			readFile = new File(folderToLoadFrom, name);
+			JsonReader reader = new JsonReader(new FileReader(readFile));
+			Object o = gson.fromJson(reader, clazz);
+			reader.close();
+			return clazz.cast(o);
+		} catch (IOException e) {
+			System.err.println("Failed to load file: " + name + " Creating default implementation.");
+			try {
+				T o = clazz.cast(clazz.getConstructors()[0].newInstance());
+				if (o instanceof ISavable) {
+					((ISavable) o).saveTo(folderToLoadFrom, name);
+				}
+				return o;
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | SecurityException e1) {
+				e1.printStackTrace();
+				System.err.println("Failed to load file: " + name);
+			}
+		}
+		return null;
+	}
 
 }
