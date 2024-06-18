@@ -118,8 +118,10 @@ public class SaveSystem {
 	
 	/**
 	 * Saves the object into the specified folder with the specified name.
-	 * @param folder folder to save the file to
+	 * @param obj the object to be saved
+	 * @param folderToSaveTo folder to save the file to
 	 * @param name the name of the saved file
+	 * @return true / false
 	 */
 	public static boolean saveTo(Object obj, File folderToSaveTo, String name) {
 		if (!folderToSaveTo.exists()) {
@@ -150,7 +152,7 @@ public class SaveSystem {
 	 * Loads the data to a object of given class. If no saved data is found in the specified location, a new implementation of the class is created.
 	 * @param <T> The type of object to return
 	 * @param clazz The class the data belongs to
-	 * @param folder the folder where the saved data can be found
+	 * @param folderToLoadFrom the folder where the saved data can be found
 	 * @param name the name of the saved data file
 	 * @return the loaded object or null
 	 */
